@@ -9,7 +9,7 @@ const NavContainer = styled(motion.nav)`
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.15);
+  background: transparent;
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding: 1.5rem 0;

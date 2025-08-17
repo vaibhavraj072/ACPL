@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
@@ -93,6 +93,76 @@ const AboutVideo = styled.video`
 `;
 
 const AboutSection = () => {
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && videoRef.current) {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      } else if (!document.hidden && videoRef.current && isPlaying) {
+        videoRef.current.play();
+      }
+    };
+
+    const handleIntersection = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !isPlaying) {
+          if (videoRef.current) {
+            videoRef.current.play();
+            setIsPlaying(true);
+          }
+        } else if (!entry.isIntersecting && isPlaying) {
+          if (videoRef.current) {
+            videoRef.current.pause();
+            setIsPlaying(false);
+          }
+        }
+      });
+    };
+
+    // Create Intersection Observer for better performance
+    const observer = new IntersectionObserver(handleIntersection, {
+      threshold: 0.3, // Trigger when 30% of video is visible
+      rootMargin: '0px 0px -100px 0px' // Start pausing slightly before video is completely out of view
+    });
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (videoRef.current) {
+        observer.unobserve(videoRef.current);
+      }
+      observer.disconnect();
+    };
+  }, [isPlaying]);
+
+  const togglePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        videoRef.current.play();
+        setIsPlaying(true);
+      }
+    }
+  };
+
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
   const textVariants = {
     hidden: { opacity: 0, x: -50 },
     visible: { 
@@ -143,10 +213,74 @@ const AboutSection = () => {
           initial="hidden"
           animate="visible"
         >
-          <AboutVideo autoPlay muted loop playsInline>
+          <AboutVideo 
+            ref={videoRef}
+            autoPlay 
+            muted={isMuted}
+            loop 
+            playsInline
+          >
             <source src="/About_Us_video.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </AboutVideo>
+          
+          {/* Video Controls Overlay */}
+          <motion.div
+            style={{
+              position: 'absolute',
+              bottom: '1rem',
+              right: '1rem',
+              display: 'flex',
+              gap: '0.5rem',
+              zIndex: 10
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+          >
+            <button
+              onClick={toggleMute}
+              style={{
+                background: 'rgba(0, 0, 0, 0.7)',
+                color: '#ffffff',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                padding: '0.5rem',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                width: '40px',
+                height: '40px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1rem',
+                backdropFilter: 'blur(10px)'
+              }}
+              title={isMuted ? "Unmute" : "Mute"}
+            >
+              {isMuted ? "🔇" : "🔊"}
+            </button>
+            <button
+              onClick={togglePlayPause}
+              style={{
+                background: 'rgba(0, 0, 0, 0.7)',
+                color: '#ffffff',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                padding: '0.5rem',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                width: '40px',
+                height: '40px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1rem',
+                backdropFilter: 'blur(10px)'
+              }}
+              title={isPlaying ? "Pause" : "Play"}
+            >
+              {isPlaying ? "⏸️" : "▶️"}
+            </button>
+          </motion.div>
         </VisualElement>
       </ContentWrapper>
     </AboutContainer>

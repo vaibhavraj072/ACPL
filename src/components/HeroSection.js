@@ -157,12 +157,42 @@ const HeroSection = () => {
       }
     };
 
+    const handleIntersection = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !isPlaying) {
+          if (videoRef.current) {
+            videoRef.current.play();
+            setIsPlaying(true);
+          }
+        } else if (!entry.isIntersecting && isPlaying) {
+          if (videoRef.current) {
+            videoRef.current.pause();
+            setIsPlaying(false);
+          }
+        }
+      });
+    };
+
+    // Create Intersection Observer for better performance
+    const observer = new IntersectionObserver(handleIntersection, {
+      threshold: 0.3, // Trigger when 30% of video is visible
+      rootMargin: '0px 0px -100px 0px' // Start pausing slightly before video is completely out of view
+    });
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('scroll', handleScroll);
+      if (videoRef.current) {
+        observer.unobserve(videoRef.current);
+      }
+      observer.disconnect();
     };
   }, [isPlaying]);
 
