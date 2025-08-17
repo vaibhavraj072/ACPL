@@ -292,7 +292,6 @@ const HeroSection = () => {
           initial="hidden"
           animate="visible"
         >
-          <CTAButtonSmall>Get a Quote</CTAButtonSmall>
           <CTAButton
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}

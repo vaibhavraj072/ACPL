@@ -279,6 +279,7 @@ const ContactSection = () => {
     phoneNumber: '',
     requirements: ''
   });
+  const [hoveredCard, setHoveredCard] = useState(null);
 
   const handleInputChange = (e) => {
     setFormData({
@@ -291,6 +292,14 @@ const ContactSection = () => {
     e.preventDefault();
     console.log('Form submitted:', formData);
     // Handle form submission here
+  };
+
+  const handleCardHover = (cardIndex) => {
+    setHoveredCard(cardIndex);
+  };
+
+  const handleCardLeave = () => {
+    setHoveredCard(null);
   };
 
   const cardVariants = {
@@ -332,14 +341,18 @@ const ContactSection = () => {
           variants={cardVariants}
           initial="hidden"
           animate="visible"
-          isYellow={true}
+          isYellow={hoveredCard !== null && hoveredCard !== 0}
+          onMouseEnter={() => handleCardHover(0)}
+          onMouseLeave={handleCardLeave}
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.3 }}
         >
           <CardIcon>💬</CardIcon>
           <CardTitle>Book a Meeting</CardTitle>
           <CardDescription>
             Book a meeting for short intro and a quick start to your dream.
           </CardDescription>
-          <CardButton isYellow={true}>
+          <CardButton isYellow={hoveredCard !== null && hoveredCard !== 0}>
             Book Meeting →
           </CardButton>
         </ContactCard>
@@ -349,13 +362,18 @@ const ContactSection = () => {
           initial="hidden"
           animate="visible"
           transition={{ delay: 0.1 }}
+          isYellow={hoveredCard !== null && hoveredCard !== 1}
+          onMouseEnter={() => handleCardHover(1)}
+          onMouseLeave={handleCardLeave}
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.3 }}
         >
           <CardIcon>📞</CardIcon>
           <CardTitle>Phone Us</CardTitle>
           <CardDescription>
             If you prefer to speak by phone, we're available by 12/7 to answer your call.
           </CardDescription>
-          <CardButton>
+          <CardButton isYellow={hoveredCard !== null && hoveredCard !== 1}>
             Call us on +918210273002 →
           </CardButton>
         </ContactCard>
@@ -365,13 +383,18 @@ const ContactSection = () => {
           initial="hidden"
           animate="visible"
           transition={{ delay: 0.2 }}
+          isYellow={hoveredCard !== null && hoveredCard !== 2}
+          onMouseEnter={() => handleCardHover(2)}
+          onMouseLeave={handleCardLeave}
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.3 }}
         >
           <CardIcon>🧭</CardIcon>
           <CardTitle>Get Direction</CardTitle>
           <CardDescription>
             Get Direction to office if you are nearby.
           </CardDescription>
-          <CardButton>
+          <CardButton isYellow={hoveredCard !== null && hoveredCard !== 2}>
             Direction →
           </CardButton>
         </ContactCard>
