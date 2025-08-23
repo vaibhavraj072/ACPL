@@ -6041,30 +6041,42 @@
         "clean-css": {
           "optional": true
         },
-        "csso": {
-          "optional": true
-        },
-        "esbuild": {
-          "optional": true
+        {
+          "name": "construction-company-website",
+          "version": "1.0.0",
+          "description": "Modern construction company website with animated hero section",
+          "main": "index.js",
+          "engines": {
+            "node": "18.x",
+            "npm": ">=9"
+          },
+          "scripts": {
+            "start": "react-scripts start",
+            "build": "react-scripts build",
+            "test": "react-scripts test",
+            "eject": "react-scripts eject"
+          },
+          "dependencies": {
+            "framer-motion": "^10.16.4",
+            "react": "^18.2.0",
+            "react-dom": "^18.2.0",
+            "react-router-dom": "^7.8.1",
+            "react-scripts": "5.0.1",
+            "styled-components": "^6.0.8"
+          },
+          "browserslist": {
+            "production": [
+              ">0.2%",
+              "not dead",
+              "not op_mini all"
+            ],
+            "development": [
+              "last 1 chrome version",
+              "last 1 firefox version",
+              "last 1 safari version"
+            ]
+          }
         }
-      }
-    },
-    "node_modules/css-minimizer-webpack-plugin/node_modules/source-map": {
-      "version": "0.6.1",
-      "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.6.1.tgz",
-      "integrity": "sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==",
-      "license": "BSD-3-Clause",
-      "engines": {
-        "node": ">=0.10.0"
-      }
-    },
-    "node_modules/css-prefers-color-scheme": {
-      "version": "6.0.3",
-      "resolved": "https://registry.npmjs.org/css-prefers-color-scheme/-/css-prefers-color-scheme-6.0.3.tgz",
-      "integrity": "sha512-4BqMbZksRkJQx2zAjrokiGMd07RqOa2IxIrrN10lyBe9xhn9DEvjUK79J6jkeiv9D9hQFXKb6g1jwU62jziJZA==",
-      "license": "CC0-1.0",
-      "bin": {
-        "css-prefers-color-scheme": "dist/cli.cjs"
       },
       "engines": {
         "node": "^12 || ^14 || >=16"
